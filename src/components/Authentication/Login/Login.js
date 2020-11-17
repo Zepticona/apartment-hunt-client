@@ -5,13 +5,17 @@ import "firebase/auth";
 import firebaseConfig from '../firebase.config';
 import classes from './login.module.css';
 import {UserContext} from '../../../App';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const Login = () => {
+    let history = useHistory();
+    let location = useLocation();
+    let { from } = location.state || { from: { pathname: "/" } };
+
+
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
     console.log(loggedInUser);
-    const [userInfo, setUserInfo] = useState({
-        loggedInUser: false
-    });
+    const [userInfo, setUserInfo] = useState({});
     const [newUser, setNewUser] = useState(false);
 
 
@@ -35,13 +39,18 @@ const Login = () => {
             console.log(result);
             const currentUserInfo = {...userInfo};
             currentUserInfo.loggedInUser = true;
+            setUserInfo(currentUserInfo);
+            setLoggedInUser(currentUserInfo);
+            history.replace(from);
             console.log('Account created successfully.');
             console.log(userInfo);
         })
         .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
+            console.log(errorCode);
             var errorMessage = error.message;
+            console.log(errorMessage);
             // ...
         });
     }
@@ -53,9 +62,10 @@ const Login = () => {
             console.log(result);
             console.log("logged in successfully");
             const currentUserInfo = {...userInfo};
-            currentUserInfo.loggedInUser = true;
+            // currentUserInfo.loggedInUser = true;
+            setLoggedInUser(currentUserInfo);
             setUserInfo(currentUserInfo);
-            console.log(userInfo);
+            history.replace(from);
         })
         .catch(function(error) {
             // Handle Errors here.
@@ -82,7 +92,6 @@ const Login = () => {
             // The signed-in user info.
             var user = result.user;
             const signedInUser = {
-                isSignedIn: true,
                 name: user.displayName,
                 email: user.email,
                 photo: user.photoURL,
@@ -90,7 +99,7 @@ const Login = () => {
             }
             setUserInfo(signedInUser);
             setLoggedInUser(signedInUser);
-            // history.replace(from)
+            history.replace(from);
             console.log(user)
             
         }).catch(error => {
@@ -111,16 +120,17 @@ const Login = () => {
         formContent = (
             <div>
                 <p>Create an Account</p>
-                <input onBlur={handleBlur} type="text" placeholder="First Name" name="firstName" />
+                <input onBlur={handleBlur} type="text" placeholder="First Name" name="firstName" required />
                 <br/>
-                <input onBlur={handleBlur} type="text" placeholder="Last Name" name="lastName" />
+                <input required onBlur={handleBlur} type="text" placeholder="Last Name" name="lastName" />
                 <br/>
-                <input onBlur={handleBlur} type="email" placeholder="Email" name="email" />
+                <input required onBlur={handleBlur} type="email" placeholder="Email" name="email" />
                 <br/>
-                <input onBlur={handleBlur} type="password" placeholder="Password" name="password" />
+                <input required onBlur={handleBlur} type="password" placeholder="Password" name="password" />
                 <br/>
-                <input onBlur={handleBlur} type="password" placeholder="Password" name="cpassword" />
+                <input required onBlur={handleBlur} type="password" placeholder="Password" name="cpassword" />
                 <br/>
+                <small>Password must be of at least 6 characters.</small>
                 <button onClick={handleCreateAccount} className={classes.authenticationBtn}>Create an account</button>
             </div>
         )
@@ -128,16 +138,16 @@ const Login = () => {
         formContent = (
             <div>
                 <h4>Login</h4>
-                <input onBlur={handleBlur} name="email" type="email" placeholder="Username or Email"  />
+                <input required onBlur={handleBlur} name="email" type="email" placeholder="Username or Email"  />
                 <br/>
-                <input onBlur={handleBlur} name="password" type="password" placeholder="Enter your password"  />
+                <input required onBlur={handleBlur} name="password" type="password" placeholder="Enter your password"  />
                 <br/>
                 <button onClick={loginPassBasedAccount} className={classes.authenticationBtn}>Login</button>
             </div>
         )
     }
 
-    
+    console.log(loggedInUser);
     return (
         <Container>
             <div className={classes.authenticationContainer}>

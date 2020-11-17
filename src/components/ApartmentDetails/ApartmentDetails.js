@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import Banner from '../Home/Banner/Banner';
 import Navigation from '../Shared/Navigation/Navigation';
 import AptImgGallery from './AptImgGallery/AptImgGallery';
 import RentRequestForm from './RentRequestForm/RentRequestForm';
 import classes from './apartmentDetails.module.css';
-
+import fakeData from '../Home/Apartment/Apartment';
+import { UserContext } from '../../App';
 
 const ApartmentDetails = (props) => {
+    const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+    console.log(loggedInUser);
+     
     return (
         <div>
             <Navigation></Navigation>

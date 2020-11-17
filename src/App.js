@@ -12,6 +12,7 @@ import AddHouse from "./components/Dashboard/AddHouse/AddHouse";
 import MyRent from "./components/Dashboard/MyRent/MyRent";
 import Login from "./components/Authentication/Login/Login";
 import ApartmentDetails from "./components/ApartmentDetails/ApartmentDetails";
+import PrivateRoute from "./components/Authentication/PrivateRoute/PrivateRoute";
 
 export const UserContext = createContext();
 function App() {
@@ -23,9 +24,9 @@ function App() {
           <Route path="/login">
             <Login></Login>
           </Route>
-          <Route path="/apartmentDetails">
+          <PrivateRoute path="/apartmentDetails">
             <ApartmentDetails></ApartmentDetails>
-          </Route>
+          </PrivateRoute>
           <Route path="/dashboard/booking">
             <Dashboard></Dashboard>
           </Route>
